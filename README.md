@@ -47,6 +47,40 @@ folders into your repo's `.codex/skills/`.
 | `yt-shorts` | finds the Shorts hiding in a long video |
 | `yt-audit` | reads a channel and says what is actually wrong |
 
+## Script usage
+
+Run these commands from the repository root with Python 3.
+
+### Audience retention
+
+```bash
+python3 skills/yt-retention/retention.py retention.csv
+python3 skills/yt-retention/retention.py retention.csv --json
+python3 skills/yt-retention/retention.py retention.csv --axis seconds
+python3 skills/yt-retention/retention.py retention.csv --axis percent --duration 600
+python3 skills/yt-retention/retention.py retention.csv --transcript transcript.srt
+```
+
+Use `--axis auto`, `--axis percent`, or `--axis seconds` to select the time axis. `--duration` supplies video duration and `--transcript` associates transcript text with retention drops.
+
+### Edit decision list
+
+```bash
+python3 skills/yt-edit/deadair.py transcript.srt
+python3 skills/yt-edit/deadair.py transcript.srt --floor 0.35 --json
+```
+
+Accepts SRT/VTT transcripts and Whisper JSON. The default minimum gap is 0.45 seconds. The script suggests cuts; it does not edit video files.
+
+### YouTube chapters
+
+```bash
+python3 skills/yt-chapters/chapters.py transcript.srt
+python3 skills/yt-chapters/chapters.py transcript.srt --target 8 --json
+```
+
+Accepts SRT/VTT transcripts and Whisper JSON. The generated list must start at `00:00`, contain at least three chapters, and give each chapter at least 10 seconds. Review the draft titles before publishing.
+
 ## Your voice
 
 Copy `templates/voice.md` to `~/.codex/youtube/voice.md` and fill it in. Every skill reads it.

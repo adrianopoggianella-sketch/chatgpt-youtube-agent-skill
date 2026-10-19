@@ -25,9 +25,15 @@ STOP = set("the a an of for to in on and or is are was were be been with this th
 def keywords(text):
     return {w for w in re.findall(r"[a-z']{4,}", text.lower()) if w not in STOP}
 
+def draft_title(text):
+    words = list(keywords(text))
+    words.sort(key=lambda w: (-text.lower().count(w), w))
+    return " ".join(w.capitalize() for w in words[:3]) or "Section"
+
+
 def mmss(t):
     t = int(t); h, m, s = t // 3600, (t % 3600) // 60, t % 60
-    return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"
 
 def main():
     a = sys.argv[1:]
@@ -57,9 +63,7 @@ def main():
     for n, t in enumerate(picked):
         end = picked[n + 1] if n + 1 < len(picked) else dur
         text = " ".join(c[2] for c in cues if c[0] >= t and c[1] <= end)
-        kw = [w for w in keywords(text)]
-        kw.sort(key=lambda w: -text.lower().count(w))
-        title = " ".join(w.capitalize() for w in kw[:3]) or "Section"
+        title = draft_title(text)
         chapters.append({"start": round(t, 2), "label": mmss(t), "draft_title": title,
                          "seconds": round(end - t, 2)})
     ok = len(chapters) >= 3 and chapters[0]["start"] == 0 and all(c["seconds"] >= MIN for c in chapters)
