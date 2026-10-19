@@ -72,6 +72,9 @@ def norm(t): return re.sub(r"[^a-z ]", "", t.lower()).split()
 
 def main():
     a = sys.argv[1:]
+    if "-h" in a or "--help" in a:
+        print(__doc__ or "Ajuda não disponível.")
+        return
     as_json = "--json" in a; a = [x for x in a if x != "--json"]
     floor = 0.45
     if "--floor" in a:

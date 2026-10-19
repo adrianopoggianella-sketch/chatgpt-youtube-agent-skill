@@ -44,6 +44,9 @@ def load_csv(path):
 
 def main():
     a = sys.argv[1:]
+    if "-h" in a or "--help" in a:
+        print(__doc__ or "Ajuda não disponível.")
+        return
     as_json = False
     tr = None
     axis = "auto"

@@ -37,8 +37,24 @@ def mmss(t):
 
 def main():
     a = sys.argv[1:]
+    if "-h" in a or "--help" in a:
+        print(__doc__ or "Ajuda não disponível.")
+        return
     as_json = "--json" in a; a = [x for x in a if x != "--json"]
-    target = int(a[a.index("--target") + 1]) if "--target" in a else 7
+    target = 7
+    if "--target" in a:
+        i = a.index("--target")
+        if i + 1 >= len(a) or a[i + 1].startswith("--"):
+            print("Erro: --target exige um número inteiro positivo.", file=sys.stderr)
+            sys.exit(2)
+        try:
+            target = int(a[i + 1])
+        except ValueError:
+            print("Erro: --target exige um número inteiro positivo.", file=sys.stderr)
+            sys.exit(2)
+        if target < 1:
+            print("Erro: --target exige um número inteiro positivo.", file=sys.stderr)
+            sys.exit(2)
     a = [x for x in a if not x.startswith("--") and not x.isdigit()]
     if not a or not os.path.exists(a[0]): print(__doc__); sys.exit(1)
     cues = load(a[0])
